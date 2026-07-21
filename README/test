@@ -1,0 +1,11 @@
+// const cpUpload = upload.fields([
+//   { name: "categoryCert", maxCount: 1 },
+//   { name: "feeReceipt", maxCount: 1 },
+//   { name: "appForm", maxCount: 1 },
+//   { name: "jeeScorecard", maxCount: 1 },
+//   { name: "marksheet12", maxCount: 1 },
+//   { name: "allotmentLetter", maxCount: 1 },
+//   { name: "pwdCert", maxCount: 1 },
+// ]);
+
+// connection string:-mongodb+srv://ggucounselling45_db_user:ElW5jTweqxNCLURt@cluster0.pulltng.mongodb.net/
