@@ -6,167 +6,14 @@ import FormSettings from "../models/FormSetting.js";
 import uploadToCloudinary from "../utils/uploadToCloudinary.js";
 import deleteFromCloudinary from "../utils/deleteFromCloudinary.js";
 
-// export const registerUser = async (req, res) => {
-//   try {
-//     const { email, password } = req.body;
-
-//     if (!email || !password) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Email and Password are required.",
-//       });
-//     }
-
-//     const existingUser = await User.findOne({ email });
-
-//     if (existingUser) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Email already registered.",
-//       });
-//     }
-
-//     const hashedPassword = await bcrypt.hash(password, 10);
-
-//     const user = await User.create({
-//       email,
-//       password: hashedPassword,
-//     });
-
-//     return res.status(201).json({
-//       success: true,
-//       message: "Registration Successful",
-//     });
-//   } catch (error) {
-//     return res.status(500).json({
-//       success: false,
-//       message: error.message,
-//     });
-//   }
-// };
-
-// // export const loginUser = async (req, res) => {
-// //   try {
-// //     const { email, password } = req.body;
-
-// //     if (!email || !password) {
-// //       return res.status(400).json({
-// //         success: false,
-
-// //         message: "Email and Password are required.",
-// //       });
-// //     }
-
-// //     const user = await User.findOne({ email }).select("+password");
-
-// //     if (!user) {
-// //       return res.status(401).json({
-// //         success: false,
-
-// //         message: "Invalid Email or Password",
-// //       });
-// //     }
-
-// //     const isMatch = await bcrypt.compare(password, user.password);
-
-// //     if (!isMatch) {
-// //       return res.status(401).json({
-// //         success: false,
-
-// //         message: "Invalid Email or Password",
-// //       });
-// //     }
-
-// //     const token = generateToken(user._id);
-
-// //     res.cookie("token", token, {
-// //       httpOnly: true,
-
-// //       secure: false,
-
-// //       sameSite: "lax",
-
-// //       maxAge: 7 * 24 * 60 * 60 * 1000,
-// //     });
-
-// //     return res.status(200).json({
-// //       success: true,
-
-// //       message: "Login Successful",
-// //     });
-// //   } catch (error) {
-// //     return res.status(500).json({
-// //       success: false,
-
-// //       message: error.message,
-// //     });
-// //   }
-// // };
-
-// export const getUserProfile = async (req, res) => {
-//   try {
-//     return res.status(200).json({
-//       success: true,
-
-//       user: req.user,
-//     });
-//   } catch (error) {
-//     return res.status(500).json({
-//       success: false,
-
-//       message: error.message,
-//     });
-//   }
-// };
-
-// export const logoutUser = async (req, res) => {
-//   try {
-//     res.clearCookie("token");
-
-//     return res.status(200).json({
-//       success: true,
-
-//       message: "Logout Successful",
-//     });
-//   } catch (error) {
-//     return res.status(500).json({
-//       success: false,
-
-//       message: error.message,
-//     });
-//   }
-// };
-
-// export const getFormStatus = async (req, res) => {
-//   try {
-//     const settings = await FormSettings.findOne();
-
-//     if (!settings) {
-//       return res.status(200).json({
-//         success: true,
-//         isFormActive: false,
-//       });
-//     }
-
-//     return res.status(200).json({
-//       success: true,
-//       isFormActive: settings.isFormActive,
-//     });
-//   } catch (error) {
-//     return res.status(500).json({
-//       success: false,
-//       message: error.message,
-//     });
-//   }
-// };
 
 
 export const submitForm = async (req, res) => {
   const uploadedPublicIds = [];
+
   try {
     const {
       email,
-      password,
       name,
       fatherName,
       motherName,
@@ -175,22 +22,34 @@ export const submitForm = async (req, res) => {
       nationality,
       religion,
       category,
-      physicallyChallenged,
-      alreadyBtechStudent,
       address,
-      mobileNo,
-      alternateMobileNo,
 
-      referenceNo,
+      mobile,
+      altMobile,
+
+      refNo,
       amount,
-      paymentDate,
+      bank,
+      date_feepayment,
 
-      twelfthPercentage,
-      btechCollegeName,
-      btechCgpa,
-      gateRank,
+      qualifyExam,
+      branchOfStudy,
+      subjectOfStudy,
+      otherQualification,
+      marks12,
+      marksBTech,
 
-      declarationAccepted,
+      gateQualified,
+      applicationNum,
+      yearOfExam,
+      gateScore,
+
+      physChallenged,
+      admissionStatus,
+      branchName,
+
+      declaration,
+      mailDeclaration,
     } = req.body;
 
     const existingUser = await Forms.findOne({ email });
@@ -212,29 +71,19 @@ export const submitForm = async (req, res) => {
       });
     }
 
-    // Read all text fields
-
-    // Read uploaded files
     const files = req.files;
 
     const documentFolders = {
       passportPhoto: "GGU-Counselling/passportPhoto",
-
-      tenthMarksheet: "GGU-Counselling/tenthMarksheet",
-
-      twelfthMarksheet: "GGU-Counselling/twelfthMarksheet",
-
-      aadhaarCard: "GGU-Counselling/aadhaarCard",
-
-      btechMarksheet: "GGU-Counselling/btechMarksheet",
-
-      gateScoreCard: "GGU-Counselling/gateScoreCard",
-
-      categoryCertificate: "GGU-Counselling/categoryCertificate",
-
+      marksheet10: "GGU-Counselling/marksheet10",
+      marksheet12: "GGU-Counselling/marksheet12",
+      gateQualifyExam: "GGU-Counselling/gateQualifyExam",
+      gateScorecard: "GGU-Counselling/gateScorecard",
+      categoryCert: "GGU-Counselling/categoryCertificate",
+      pwdCert: "GGU-Counselling/pwdCertificate",
+      allotmentLetter: "GGU-Counselling/allotmentLetter",
       feeReceipt: "GGU-Counselling/feeReceipt",
-
-      applicationForm: "GGU-Counselling/applicationForm",
+      appForm: "GGU-Counselling/applicationForm",
     };
 
     const uploadedDocuments = {};
@@ -243,21 +92,17 @@ export const submitForm = async (req, res) => {
       if (files[field]) {
         const uploaded = await uploadToCloudinary(
           files[field][0].buffer,
-          documentFolders[field],
+          documentFolders[field]
         );
 
         uploadedDocuments[field] = uploaded;
-
         uploadedPublicIds.push(uploaded.public_id);
       }
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
 
-    const forms = new Forms({
+    const form = new Forms({
       email,
-      password: hashedPassword, // We'll hash this before saving
-
       name,
       fatherName,
       motherName,
@@ -266,45 +111,61 @@ export const submitForm = async (req, res) => {
       nationality,
       religion,
       category,
-      physicallyChallenged,
-      alreadyBtechStudent,
       address,
-      mobileNo,
-      alternateMobileNo,
+
+      mobile,
+      altMobile,
+
+      physChallenged: physChallenged === "Yes",
 
       feeDetails: {
-        referenceNo,
-        amount,
-        paymentDate,
+        referenceNo: refNo,
+        amount: Number(amount),
+        bank,
+        paymentDate: date_feepayment,
       },
 
       academicDetails: {
-        twelfthPercentage,
-        btechCollegeName,
-        btechCgpa,
-        gateRank,
+        qualifyExam,
+        branchOfStudy,
+        subjectOfStudy,
+        otherQualification,
+        marks12: Number(marks12),
+        marksBTech: Number(marksBTech),
+
+        gateQualified: gateQualified === "Yes",
+        applicationNum,
+        yearOfExam: yearOfExam ? Number(yearOfExam) : undefined,
+        gateScore: gateScore ? Number(gateScore) : undefined,
+      },
+
+      admissionDetails: {
+        admissionStatus: admissionStatus === "Yes",
+        branchName,
       },
 
       documents: uploadedDocuments,
 
-      declarationAccepted,
+      declarationAccepted: declaration === "true" || declaration === true,
+      mailDeclaration: mailDeclaration === "true" || mailDeclaration === true,
 
       isSubmitted: true,
-
       submittedAt: new Date(),
     });
 
-    await forms.save();
+    await form.save();
 
     return res.status(200).json({
       success: true,
-      message: "Counselling form submitted successfully",
+      message: "Counselling form submitted successfully.",
     });
   } catch (error) {
     for (const publicId of uploadedPublicIds) {
       await deleteFromCloudinary(publicId);
     }
+
     console.error(error);
+
     return res.status(500).json({
       success: false,
       message: error.message,

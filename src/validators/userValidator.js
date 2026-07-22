@@ -39,33 +39,30 @@ export const validateSubmitForm = [
     .withMessage("Religion is required."),
 
   body("category")
-    .isIn(["General", "SC", "ST", "Gen EWS"])
-    .withMessage("Invalid Category."),
+  .isIn(["Gen", "Gen-EWS", "OBC-NCL", "SC", "ST"])
+  .withMessage("Invalid Category."),
 
-  body("physicallyChallenged")
-    .isBoolean()
-    .withMessage("Physically Challenged must be true or false."),
+  body("physChallenged")
+  .isIn(["Yes", "No"])
+  .withMessage("Invalid Physically Challenged value."),
 
-  body("alreadyBtechStudent")
-    .isBoolean()
-    .withMessage("Already BTech Student must be true or false."),
 
   body("address")
     .trim()
     .notEmpty()
     .withMessage("Address is required."),
 
-  body("mobileNo")
+  body("mobile")
     .isMobilePhone("en-IN")
     .withMessage("Invalid Mobile Number."),
 
-  body("alternateMobileNo")
+  body("altMobile")
     .optional({ checkFalsy: true })
     .isMobilePhone("en-IN")
     .withMessage("Invalid Alternate Mobile Number."),
 
   // Fee Details
-  body("referenceNo")
+  body("refNo")
     .trim()
     .notEmpty()
     .withMessage("Reference Number is required."),
@@ -74,29 +71,102 @@ export const validateSubmitForm = [
     .isFloat({ min: 1 })
     .withMessage("Amount must be greater than 0."),
 
-  body("paymentDate")
+ body("date_feepayment")
     .isISO8601()
     .withMessage("Invalid Payment Date."),
 
   // Academic Details
-  body("twelfthPercentage")
+  body("marks12")
     .isFloat({ min: 0, max: 100 })
     .withMessage("12th Percentage must be between 0 and 100."),
 
-  body("btechCollegeName")
-    .trim()
-    .notEmpty()
-    .withMessage("BTech College Name is required."),
 
-  body("btechCgpa")
+  body("marksBTech")
     .isFloat({ min: 0, max: 10 })
     .withMessage("CGPA must be between 0 and 10."),
 
-  body("gateRank")
-    .isInt({ min: 1 })
-    .withMessage("Invalid GATE Rank."),
+  body("gateScore")
+  .if(body("gateQualified").equals("Yes"))
+  .isInt({ min: 1 })
+  .withMessage("Invalid GATE Rank."),
 
-  body("declarationAccepted")
+  body("declaration")
     .equals("true")
-    .withMessage("Please accept the declaration.")
+    .withMessage("Please accept the declaration."),
+
+  // Qualifying Exam
+body("qualifyExam")
+  .isIn(["B.Tech.", "M.Sc", "MCA", "Any other"])
+  .withMessage("Invalid Qualifying Exam."),
+
+// Branch of Study (required only for B.Tech.)
+body("branchOfStudy")
+  .if(body("qualifyExam").equals("B.Tech."))
+  .trim()
+  .notEmpty()
+  .withMessage("Branch of Study is required."),
+
+// Subject of Study (required only for M.Sc or MCA)
+body("subjectOfStudy")
+  .if((value, { req }) =>
+    req.body.qualifyExam === "M.Sc" ||
+    req.body.qualifyExam === "MCA"
+  )
+  .trim()
+  .notEmpty()
+  .withMessage("Subject of Study is required."),
+
+// Other Qualification (required only for 'Any other')
+body("otherQualification")
+  .if(body("qualifyExam").equals("Any other"))
+  .trim()
+  .notEmpty()
+  .withMessage("Please specify your qualification."),
+
+// GATE Qualified
+body("gateQualified")
+  .isIn(["Yes", "No"])
+  .withMessage("Invalid GATE qualification status."),
+
+// GATE Application Number
+body("applicationNum")
+  .if(body("gateQualified").equals("Yes"))
+  .trim()
+  .notEmpty()
+  .withMessage("GATE Application Number is required."),
+
+// GATE Year
+body("yearOfExam")
+  .if(body("gateQualified").equals("Yes"))
+  .isInt({ min: 2000, max: new Date().getFullYear() })
+  .withMessage("Invalid GATE Examination Year."),
+
+// Branch Name (required only if already admitted)
+body("branchName")
+  .if(body("admissionStatus").equals("Yes"))
+  .trim()
+  .notEmpty()
+  .withMessage("Program Name is required."),
+
+// Mail Declaration
+body("mailDeclaration")
+  .equals("true")
+  .withMessage("Please confirm that you have sent the email."),
+
+// Transaction ID / UTR
+body("bank")
+  .trim()
+  .notEmpty()
+  .withMessage("Transaction ID / UTR is required."),  
 ];
+
+body("applicationNum")
+  .if(body("gateQualified").equals("Yes"))
+  .trim()
+  .notEmpty()
+  .withMessage("GATE Application Number is required.");
+
+body("yearOfExam")
+  .if(body("gateQualified").equals("Yes"))
+  .isInt({ min: 2000, max: new Date().getFullYear() })
+  .withMessage("Invalid GATE Examination Year.");

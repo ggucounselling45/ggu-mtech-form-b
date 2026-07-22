@@ -1,72 +1,77 @@
 const validateFiles = (req, res, next) => {
+  const files = req.files;
 
-    const files = req.files;
+  if (!files) {
+    return res.status(400).json({
+      success: false,
+      message: "Please upload all required documents.",
+    });
+  }
 
-    if (!files) {
+  // Files required for everyone
+  const requiredFiles = [
+    "passportPhoto",
+    "marksheet10",
+    "marksheet12",
+    "gateQualifyExam",
+    "feeReceipt",
+    "appForm",
+  ];
 
-        return res.status(400).json({
-            success: false,
-            message: "Please upload all required documents."
-        });
-
+  for (const file of requiredFiles) {
+    if (!files[file] || files[file].length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: `${file} is required.`,
+      });
     }
+  }
 
-    const requiredFiles = [
+  // GATE Scorecard required only if GATE Qualified = Yes
+  if (
+    req.body.gateQualified === "Yes" &&
+    (!files.gateScorecard || files.gateScorecard.length === 0)
+  ) {
+    return res.status(400).json({
+      success: false,
+      message: "GATE Scorecard is required.",
+    });
+  }
 
-        "passportPhoto",
+  // Category Certificate required only for reserved categories
+  if (
+    ["Gen-EWS", "OBC-NCL", "SC", "ST"].includes(req.body.category) &&
+    (!files.categoryCert || files.categoryCert.length === 0)
+  ) {
+    return res.status(400).json({
+      success: false,
+      message: "Category Certificate is required.",
+    });
+  }
 
-        "tenthMarksheet",
+  // PWD Certificate required only if Physically Challenged = Yes
+  if (
+    req.body.physChallenged === "Yes" &&
+    (!files.pwdCert || files.pwdCert.length === 0)
+  ) {
+    return res.status(400).json({
+      success: false,
+      message: "PWD Certificate is required.",
+    });
+  }
 
-        "twelfthMarksheet",
+  // Allotment Letter required only if already admitted
+  if (
+    req.body.admissionStatus === "Yes" &&
+    (!files.allotmentLetter || files.allotmentLetter.length === 0)
+  ) {
+    return res.status(400).json({
+      success: false,
+      message: "Provisional Allotment Letter is required.",
+    });
+  }
 
-        "aadhaarCard",
-
-        "btechMarksheet",
-
-        "gateScoreCard",
-
-        "feeReceipt",
-
-        "applicationForm"
-
-    ];
-
-    for (const file of requiredFiles) {
-
-        if (!files[file] || files[file].length === 0) {
-
-            return res.status(400).json({
-                success: false,
-                message: `${file} is required.`
-            });
-
-        }
-
-    }
-
-    // Category Certificate required only if category is not General
-
-    if (
-
-        req.body.category !== "General" &&
-
-        (!files.categoryCertificate ||
-            files.categoryCertificate.length === 0)
-
-    ) {
-
-        return res.status(400).json({
-
-            success: false,
-
-            message: "Category Certificate is required."
-
-        });
-
-    }
-
-    next();
-
+  next();
 };
 
 export default validateFiles;

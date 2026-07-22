@@ -16,71 +16,17 @@ import validate from "../middleware/validate.js";
 const router = express.Router();
 
 const uploadFields = upload.fields([
-  {
-    name: "passportPhoto",
-    maxCount: 1,
-  },
-
-  {
-    name: "tenthMarksheet",
-    maxCount: 1,
-  },
-
-  {
-    name: "twelfthMarksheet",
-    maxCount: 1,
-  },
-
-  {
-    name: "aadhaarCard",
-    maxCount: 1,
-  },
-
-  {
-    name: "btechMarksheet",
-    maxCount: 1,
-  },
-
-  {
-    name: "gateScoreCard",
-    maxCount: 1,
-  },
-
-  {
-    name: "categoryCertificate",
-    maxCount: 1,
-  },
-
-  {
-    name: "feeReceipt",
-    maxCount: 1,
-  },
-
-  {
-    name: "applicationForm",
-    maxCount: 1,
-  },
+  { name: "passportPhoto", maxCount: 1 },
+  { name: "marksheet10", maxCount: 1 },
+  { name: "marksheet12", maxCount: 1 },
+  { name: "gateQualifyExam", maxCount: 1 },
+  { name: "gateScorecard", maxCount: 1 },
+  { name: "categoryCert", maxCount: 1 },
+  { name: "pwdCert", maxCount: 1 },
+  { name: "allotmentLetter", maxCount: 1 },
+  { name: "feeReceipt", maxCount: 1 },
+  { name: "appForm", maxCount: 1 },
 ]);
-
-// router.post("/register", registerUser);
-
-// router.post("/login", loginUser);
-
-// router.get("/profile", userAuth, getUserProfile);
-
-// router.post("/logout", userAuth, logoutUser);
-
-// router.get("/form-status", getFormStatus);
-
-// router.put(
-//   "/submit-form",
-//   userAuth,
-//   uploadFields,
-//   validateSubmitForm,
-//   validate,
-//   validateFiles,
-//   submitForm,
-// );
 
 router.post(
   "/submit-form",

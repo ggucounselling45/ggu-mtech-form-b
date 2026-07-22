@@ -28,12 +28,6 @@ const userSchema = new mongoose.Schema(
       trim: true,
     },
 
-    password: {
-      type: String,
-      required: true,
-      select: false,
-    },
-
     // =============================
     // Personal Details
     // =============================
@@ -75,15 +69,10 @@ const userSchema = new mongoose.Schema(
 
     category: {
       type: String,
-      enum: ["General", "SC", "ST", "Gen EWS"],
+      enum: ["Gen", "Gen-EWS", "OBC-NCL", "SC", "ST"],
     },
 
     physicallyChallenged: {
-      type: Boolean,
-      default: false,
-    },
-
-    alreadyBtechStudent: {
       type: Boolean,
       default: false,
     },
@@ -93,12 +82,12 @@ const userSchema = new mongoose.Schema(
       default: "",
     },
 
-    mobileNo: {
+    mobile: {
       type: String,
       default: "",
     },
 
-    alternateMobileNo: {
+    altMobile: {
       type: String,
       default: "",
     },
@@ -112,6 +101,8 @@ const userSchema = new mongoose.Schema(
 
       amount: Number,
 
+      bank: String,
+
       paymentDate: Date,
     },
 
@@ -120,13 +111,37 @@ const userSchema = new mongoose.Schema(
     // =============================
 
     academicDetails: {
-      twelfthPercentage: Number,
+      qualifyExam: String,
 
-      btechCollegeName: String,
+      branchOfStudy: String,
 
-      btechCgpa: Number,
+      subjectOfStudy: String,
 
-      gateRank: Number,
+      otherQualification: String,
+
+      marks12: Number,
+
+      marksBTech: Number,
+
+      gateQualified: {
+        type: Boolean,
+        default: false,
+      },
+
+      applicationNum: String,
+
+      yearOfExam: Number,
+
+      gateScore: Number,
+    },
+
+    admissionDetails: {
+      admissionStatus: {
+        type: Boolean,
+        default: false,
+      },
+
+      branchName: String,
     },
 
     // =============================
@@ -136,32 +151,32 @@ const userSchema = new mongoose.Schema(
     documents: {
       passportPhoto: fileSchema,
 
-      tenthMarksheet: fileSchema,
+      marksheet10: fileSchema,
 
-      twelfthMarksheet: fileSchema,
+      marksheet12: fileSchema,
 
-      aadhaarCard: fileSchema,
+      gateQualifyExam: fileSchema,
 
-      btechMarksheet: fileSchema,
+      gateScorecard: fileSchema,
 
-      gateScoreCard: fileSchema,
+      categoryCert: fileSchema,
 
-      categoryCertificate: fileSchema,
+      pwdCert: fileSchema,
+
+      allotmentLetter: fileSchema,
 
       feeReceipt: fileSchema,
 
-      applicationForm: fileSchema,
+      appForm: fileSchema,
     },
 
     // =============================
     // Submission
     // =============================
 
-    declarationAccepted: {
-      type: Boolean,
+    declarationAccepted: Boolean,
 
-      default: false,
-    },
+    mailDeclaration: Boolean,
 
     isSubmitted: {
       type: Boolean,
@@ -170,14 +185,6 @@ const userSchema = new mongoose.Schema(
     },
 
     submittedAt: Date,
-
-    verificationStatus: {
-      type: String,
-
-      enum: ["Pending", "Verified", "Rejected"],
-
-      default: "Pending",
-    },
   },
 
   {
