@@ -1,12 +1,12 @@
 import express from "express";
-import {
-  registerUser,
-  loginUser,
-  getUserProfile,
-  logoutUser,
-} from "../controller/user.js";
+// import {
+//   registerUser,
+//   loginUser,
+//   getUserProfile,
+//   logoutUser,
+// } from "../controller/user.js";
 import userAuth from "../middleware/userAuth.js";
-import { getFormStatus } from "../controller/user.js";
+// import { getFormStatus } from "../controller/user.js";
 import { submitForm } from "../controller/user.js";
 import upload from "../middleware/upload.js";
 import validateFiles from "../validators/fileValidators.js";
@@ -62,19 +62,29 @@ const uploadFields = upload.fields([
   },
 ]);
 
-router.post("/register", registerUser);
+// router.post("/register", registerUser);
 
-router.post("/login", loginUser);
+// router.post("/login", loginUser);
 
-router.get("/profile", userAuth, getUserProfile);
+// router.get("/profile", userAuth, getUserProfile);
 
-router.post("/logout", userAuth, logoutUser);
+// router.post("/logout", userAuth, logoutUser);
 
-router.get("/form-status", getFormStatus);
+// router.get("/form-status", getFormStatus);
 
-router.put(
+// router.put(
+//   "/submit-form",
+//   userAuth,
+//   uploadFields,
+//   validateSubmitForm,
+//   validate,
+//   validateFiles,
+//   submitForm,
+// );
+
+router.post(
   "/submit-form",
-  userAuth,
+
   uploadFields,
   validateSubmitForm,
   validate,

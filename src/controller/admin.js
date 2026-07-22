@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import AdminUser from "../models/AdminUser.js";
 import generateToken from "../utils/generateToken.js";
 
-import User from "../models/User.js"
+import Forms from "../models/User.js"
 
 export const loginAdmin = async (req, res) => {
   try {
@@ -160,7 +160,7 @@ export const createAdminUser = async (req, res) => {
 //api to get all application
 export const getAllApplications = async(req,res)=>{
   try{
-    const users=await User.find(
+    const forms=await Forms.find(
       {
         isSubmitted:true,
       },
@@ -173,8 +173,8 @@ export const getAllApplications = async(req,res)=>{
 
     return res.status(200).json({
       success:true,
-      totalApplications:users.length,
-      applications:users,
+      totalApplications:forms.length,
+      applications:forms,
     });
   }catch(error){
     return res.status(500).json({
