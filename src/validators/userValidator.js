@@ -82,13 +82,13 @@ export const validateSubmitForm = [
 
 
   body("marksBTech")
-    .isFloat({ min: 0, max: 10 })
-    .withMessage("CGPA must be between 0 and 10."),
+    .isFloat({ min: 0, max: 100 })
+    .withMessage("CGPA must be upto 10 & Percentage upto 100."),
 
-  body("gateScore")
+ body("gateScore")
   .if(body("gateQualified").equals("Yes"))
-  .isInt({ min: 1 })
-  .withMessage("Invalid GATE Rank."),
+  .isFloat({ min: 0 })
+  .withMessage("Invalid GATE Score."),
 
   body("declaration")
     .equals("true")
