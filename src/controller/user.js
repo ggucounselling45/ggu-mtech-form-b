@@ -6,8 +6,6 @@ import FormSettings from "../models/FormSetting.js";
 import uploadToCloudinary from "../utils/uploadToCloudinary.js";
 import deleteFromCloudinary from "../utils/deleteFromCloudinary.js";
 
-
-
 export const submitForm = async (req, res) => {
   const uploadedPublicIds = [];
 
@@ -37,12 +35,15 @@ export const submitForm = async (req, res) => {
       subjectOfStudy,
       otherQualification,
       marks12,
-      marksBTech,
+      marksType,
+      cgpa,
+      percentage,
 
       gateQualified,
       applicationNum,
       yearOfExam,
       gateScore,
+      gateRank,
 
       physChallenged,
       admissionStatus,
@@ -92,14 +93,13 @@ export const submitForm = async (req, res) => {
       if (files[field]) {
         const uploaded = await uploadToCloudinary(
           files[field][0].buffer,
-          documentFolders[field]
+          documentFolders[field],
         );
 
         uploadedDocuments[field] = uploaded;
         uploadedPublicIds.push(uploaded.public_id);
       }
     }
-
 
     const form = new Forms({
       email,
@@ -131,12 +131,21 @@ export const submitForm = async (req, res) => {
         subjectOfStudy,
         otherQualification,
         marks12: Number(marks12),
-        marksBTech: Number(marksBTech),
+
+        marksType: marksType,
+
+        cgpa: marksType === "cgpa" && cgpa ? Number(cgpa) : undefined,
+
+        percentage:
+          marksType === "percentage" && percentage
+            ? Number(percentage)
+            : undefined,
 
         gateQualified: gateQualified === "Yes",
         applicationNum,
         yearOfExam: yearOfExam ? Number(yearOfExam) : undefined,
         gateScore: gateScore ? Number(gateScore) : undefined,
+        gateRank: gateRank ? Number(gateRank) : undefined,
       },
 
       admissionDetails: {

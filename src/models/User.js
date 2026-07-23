@@ -121,7 +121,14 @@ const userSchema = new mongoose.Schema(
 
       marks12: Number,
 
-      marksBTech: Number,
+      marksType: {
+        type: String,
+        enum: ["cgpa", "percentage"],
+      },
+
+      cgpa: Number,
+
+      percentage: Number,
 
       gateQualified: {
         type: Boolean,
@@ -133,6 +140,8 @@ const userSchema = new mongoose.Schema(
       yearOfExam: Number,
 
       gateScore: Number,
+
+      gateRank: Number,//gate rank===gate marks
     },
 
     admissionDetails: {

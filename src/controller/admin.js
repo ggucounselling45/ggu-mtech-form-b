@@ -231,13 +231,15 @@ export const downloadApplicationsExcel = async (req, res) => {
       { header: "Subject Of Study", key: "subjectOfStudy", width: 22 },
       { header: "Other Qualification", key: "otherQualification", width: 22 },
       { header: "12th Marks (%)", key: "marks12", width: 15 },
-      { header: "B.Tech Marks", key: "marksBTech", width: 15 },
+      { header: "B.Tech CGPA", key: "cgpa", width: 15 },
+      { header: "B.Tech Percentage", key: "percentage", width: 15 },
 
       // GATE
       { header: "GATE Qualified", key: "gateQualified", width: 18 },
       { header: "GATE Application No", key: "applicationNum", width: 22 },
       { header: "GATE Year", key: "yearOfExam", width: 15 },
       { header: "GATE Score", key: "gateScore", width: 15 },
+      { header: "GATE Marks", key: "gateRank", width: 15 },
 
       // Admission
       { header: "CCMT Admission", key: "admissionStatus", width: 18 },

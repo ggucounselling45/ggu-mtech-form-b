@@ -81,14 +81,29 @@ export const validateSubmitForm = [
     .withMessage("12th Percentage must be between 0 and 100."),
 
 
-  body("marksBTech")
-    .isFloat({ min: 0, max: 100 })
-    .withMessage("CGPA must be upto 10 & Percentage upto 100."),
+  body("marksType")
+  .isIn(["cgpa", "percentage"])
+  .withMessage("Please select either CGPA or Percentage."),
+
+  body("cgpa")
+  .if(body("marksType").equals("cgpa"))
+  .isFloat({ min: 0, max: 10 })
+  .withMessage("CGPA must be between 0 and 10."),
+
+  body("percentage")
+  .if(body("marksType").equals("percentage"))
+  .isFloat({ min: 0, max: 100 })
+  .withMessage("Percentage must be between 0 and 100."),
 
  body("gateScore")
   .if(body("gateQualified").equals("Yes"))
-  .isFloat({ min: 0 })
+  .isFloat({ min: 0,max:1000 })
   .withMessage("Invalid GATE Score."),
+
+   body("gateRank")
+  .if(body("gateQualified").equals("Yes"))
+  .isFloat({ min: 0,max:100 })
+  .withMessage("Invalid GATE Rank."),
 
   body("declaration")
     .equals("true")
