@@ -42,11 +42,13 @@ export const loginAdmin = async (req, res) => {
 
     const token = generateToken(admin._id);
 
+    const isProduction = process.env.NODE_ENV === "production";
+
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     return res.status(200).json({
@@ -262,7 +264,7 @@ export const downloadApplicationsExcel = async (req, res) => {
       // Metadata
       { header: "Submitted At", key: "createdAt", width: 22 },
     ];
-    
+
     applications.forEach((application) => {
       worksheet.addRow({
         // Personal Information
@@ -336,66 +338,66 @@ export const downloadApplicationsExcel = async (req, res) => {
       });
     });
 
-   // Style the header row
-const headerRow = worksheet.getRow(1);
+    // Style the header row
+    const headerRow = worksheet.getRow(1);
 
-headerRow.font = {
-  bold: true,
-  color: { argb: "FFFFFFFF" },
-};
+    headerRow.font = {
+      bold: true,
+      color: { argb: "FFFFFFFF" },
+    };
 
-headerRow.fill = {
-  type: "pattern",
-  pattern: "solid",
-  fgColor: { argb: "FF1F4E78" },
-};
+    headerRow.fill = {
+      type: "pattern",
+      pattern: "solid",
+      fgColor: { argb: "FF1F4E78" },
+    };
 
-headerRow.alignment = {
-  vertical: "middle",
-  horizontal: "center",
-};
+    headerRow.alignment = {
+      vertical: "middle",
+      horizontal: "center",
+    };
 
-headerRow.eachCell((cell) => {
-  cell.border = {
-    top: { style: "thin" },
-    left: { style: "thin" },
-    bottom: { style: "thin" },
-    right: { style: "thin" },
-  };
-});
+    headerRow.eachCell((cell) => {
+      cell.border = {
+        top: { style: "thin" },
+        left: { style: "thin" },
+        bottom: { style: "thin" },
+        right: { style: "thin" },
+      };
+    });
 
-// Freeze header row
-worksheet.views = [
-  {
-    state: "frozen",
-    ySplit: 1,
-  },
-];
+    // Freeze header row
+    worksheet.views = [
+      {
+        state: "frozen",
+        ySplit: 1,
+      },
+    ];
 
-// Enable filter
-worksheet.autoFilter = {
-  from: "A1",
-  to: {
-    row: 1,
-    column: worksheet.columnCount,
-  },
-};
+    // Enable filter
+    worksheet.autoFilter = {
+      from: "A1",
+      to: {
+        row: 1,
+        column: worksheet.columnCount,
+      },
+    };
 
-// Response headers
-res.setHeader(
-  "Content-Type",
-  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-);
+    // Response headers
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    );
 
-res.setHeader(
-  "Content-Disposition",
-  'attachment; filename="GGU_Student_Applications.xlsx"'
-);
+    res.setHeader(
+      "Content-Disposition",
+      'attachment; filename="GGU_Student_Applications.xlsx"',
+    );
 
-// Write workbook to response
-await workbook.xlsx.write(res);
+    // Write workbook to response
+    await workbook.xlsx.write(res);
 
-res.end();
+    res.end();
   } catch (error) {
     return res.status(500).json({
       success: false,
