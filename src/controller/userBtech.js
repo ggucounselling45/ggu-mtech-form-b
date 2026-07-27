@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
-import Forms from "../models/User.js";
-import generateToken from "../utils/generateToken.js";
+import FormsBtech from "../models/UserBtech.js";
+// import generateToken from "../utils/generateToken.js";
 
 import FormSettings from "../models/FormSetting.js";
 import uploadToCloudinary from "../utils/uploadToCloudinary.js";
@@ -21,6 +21,7 @@ export const submitForm = async (req, res) => {
       religion,
       category,
       address,
+      marks12,
 
       mobile,
       altMobile,
@@ -29,32 +30,22 @@ export const submitForm = async (req, res) => {
       amount,
       bank,
       date_feepayment,
+      twelfthBoardName,
+      twelfthPassingYear,
 
-      qualifyExam,
-      branchOfStudy,
-      subjectOfStudy,
-      otherQualification,
-      marks12,
-      marksType,
-      cgpa,
-      percentage,
-      ResultAwaited,
+      admissionStatus,
+      BranchAllotedBy,
+      branchName,
 
-      gateQualified,
-      applicationNum,
-      yearOfExam,
-      gateScore,
-      gateRank,
+      jeeMainAllIndiaRank,
 
       physChallenged,
-      admissionStatus,
-      branchName,
 
       declaration,
       mailDeclaration,
     } = req.body;
 
-    const existingUser = await Forms.findOne({ email });
+    const existingUser = await FormsBtech.findOne({ email });
 
     if (existingUser) {
       return res.status(400).json({
@@ -76,16 +67,17 @@ export const submitForm = async (req, res) => {
     const files = req.files;
 
     const documentFolders = {
-      passportPhoto: "GGU-Counselling/passportPhoto",
-      marksheet10: "GGU-Counselling/marksheet10",
-      marksheet12: "GGU-Counselling/marksheet12",
-      gateQualifyExam: "GGU-Counselling/gateQualifyExam",
-      gateScorecard: "GGU-Counselling/gateScorecard",
-      categoryCert: "GGU-Counselling/categoryCertificate",
-      pwdCert: "GGU-Counselling/pwdCertificate",
-      allotmentLetter: "GGU-Counselling/allotmentLetter",
-      feeReceipt: "GGU-Counselling/feeReceipt",
-      appForm: "GGU-Counselling/applicationForm",
+      passportPhoto: "GGU-Counselling-Btech/passportPhoto",
+      marksheet10: "GGU-Counselling-Btech/marksheet10",
+      marksheet12: "GGU-Counselling-Btech/marksheet12",
+
+      jeeMainScoreCard: "GGU-Counselling-Btech/gateScorecard",
+      DomicileCert: "GGU-Counselling-Btech/DomicileCert",
+      categoryCert: "GGU-Counselling-Btech/categoryCertificate",
+      pwdCert: "GGU-Counselling-Btech/pwdCertificate",
+      allotmentLetter: "GGU-Counselling-Btech/allotmentLetter",
+      feeReceipt: "GGU-Counselling-Btech/feeReceipt",
+      appForm: "GGU-Counselling-Btech/applicationForm",
     };
 
     const uploadedDocuments = {};
@@ -102,7 +94,7 @@ export const submitForm = async (req, res) => {
       }
     }
 
-    const form = new Forms({
+    const form = new FormsBtech({
       email,
       name,
       fatherName,
@@ -127,32 +119,16 @@ export const submitForm = async (req, res) => {
       },
 
       academicDetails: {
-        qualifyExam,
-        branchOfStudy,
-        subjectOfStudy,
-        otherQualification,
         marks12: Number(marks12),
+        twelfthBoardName,
+        twelfthPassingYear,
 
-        marksType: marksType,
-
-        cgpa: marksType === "cgpa" && cgpa ? Number(cgpa) : undefined,
-
-        percentage:
-          marksType === "percentage" && percentage
-            ? Number(percentage)
-            : undefined,
-
-        ResultAwaited: marksType === "ResultAwaited" ? true : undefined,
-
-        gateQualified: gateQualified === "Yes",
-        applicationNum,
-        yearOfExam: yearOfExam ? Number(yearOfExam) : undefined,
-        gateScore: gateScore ? Number(gateScore) : undefined,
-        gateRank: gateRank ? Number(gateRank) : undefined,
+       
       },
 
       admissionDetails: {
         admissionStatus: admissionStatus === "Yes",
+        BranchAllotedBy,
         branchName,
       },
 
@@ -169,7 +145,7 @@ export const submitForm = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: "Counselling form submitted successfully.",
+      message: "Counselling form for Btech submitted successfully.",
     });
   } catch (error) {
     for (const publicId of uploadedPublicIds) {

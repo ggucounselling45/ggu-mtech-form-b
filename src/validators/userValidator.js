@@ -82,7 +82,7 @@ export const validateSubmitForm = [
 
 
   body("marksType")
-  .isIn(["cgpa", "percentage"])
+  .isIn(["cgpa", "percentage","ResultAwaited"])
   .withMessage("Please select either CGPA or Percentage."),
 
   body("cgpa")

@@ -6,10 +6,7 @@ import "./src/config/cloudinary.js";
 import userRoutes from "./src/routes/user.route.js";
 import initFormSettings from "./src/utils/initFormSettings.js";
 import cors from "cors";
-
-
-
-
+import userBtechRoutes from "./src/routes/userBtech.route.js"
 import adminRoutes from "./src/routes/admin.routes.js";
 
 dotenv.config();
@@ -39,6 +36,7 @@ app.use(cookieParser());
 
 app.use("/api/admin", adminRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/userBtech",userBtechRoutes)
 
 app.listen(4000, () => {
     console.log("Server Started");

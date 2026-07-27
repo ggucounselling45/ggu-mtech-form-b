@@ -111,48 +111,36 @@ const userSchema = new mongoose.Schema(
     // =============================
 
     academicDetails: {
-      qualifyExam: String,
-
-      branchOfStudy: String,
-
-      subjectOfStudy: String,
-
-      otherQualification: String,
-
       marks12: Number,
 
-      marksType: {
+      twelfthBoardName: {
         type: String,
-        enum: ["cgpa", "percentage","ResultAwaited"],
+        default: "",
+        trim: true,
+      },
+      twelfthPassingYear: {
+        type: Date,
       },
 
-      cgpa: Number,
+      jeeMainRoll: Number,
 
-      percentage: Number,
-
-      ResultAwaited:String,
-
-      gateQualified: {
-        type: Boolean,
-        default: false,
-      },
-
-      applicationNum: String,
-
-      yearOfExam: Number,
-
-      gateScore: Number,
-
-      gateRank: Number,//gate rank===gate marks
+      jeeMainAllIndiaRank: Number, //gate rank===gate marks
     },
 
     admissionDetails: {
-      admissionStatus: {
-        type: Boolean,
-        default:false,
-      }, 
+      BranchAllotedBy: {
+        type: String,
+        enum: ["Yes", "No"],
+      },
 
-      branchName: String,
+      BranchAllotedBy: {
+        type: String,
+        enum: ["JoSAA", "CSAB"],
+      },
+      branchName: {
+        type: String,
+        default: "",
+      },
     },
 
     // =============================
@@ -166,9 +154,10 @@ const userSchema = new mongoose.Schema(
 
       marksheet12: fileSchema,
 
-      gateQualifyExam: fileSchema,
+     
 
-      gateScorecard: fileSchema,
+      jeeMainScorecard: fileSchema,
+      DomicileCert:fileSchema,
 
       categoryCert: fileSchema,
 
@@ -203,4 +192,4 @@ const userSchema = new mongoose.Schema(
   },
 );
 
-export default mongoose.model("Forms", userSchema);
+export default mongoose.model("FormsBtech", userSchema);
