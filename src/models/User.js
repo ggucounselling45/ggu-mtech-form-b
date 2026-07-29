@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema(
 
     email: {
       type: String,
-      default: "",
+      
       lowercase: true,
       trim: true,
     },
@@ -103,7 +103,7 @@ const userSchema = new mongoose.Schema(
     feeDetails: {
       refNo: {
         type: String,
-        default: "",
+        required: true,
         unique: true,
       },
       amount: Number,

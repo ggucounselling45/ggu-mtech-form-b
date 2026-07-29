@@ -55,15 +55,17 @@ export const submitForm = async (req, res) => {
       mailDeclaration,
     } = req.body;
 
-    const existingUser = await Forms.findOne({ refNo });
 
-    if (existingUser) {
-      return res.status(400).json({
-        success: false,
-        message: "A form has already been submitted using this reference number.",
-      });
-    }
+const existingUser = await Forms.findOne({
+  "feeDetails.refNo": refNo,
+});
 
+if (existingUser) {
+  return res.status(400).json({
+    success: false,
+    message: "A form has already been submitted using this Reference number.",
+  });
+}
     // Check if form is active
     const settings = await FormSettings.findOne();
 
