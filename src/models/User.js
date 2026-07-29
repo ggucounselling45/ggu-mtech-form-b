@@ -32,6 +32,11 @@ const userSchema = new mongoose.Schema(
     // Personal Details
     // =============================
 
+    applyCourseBranch:{
+      type: String,
+      default:"",
+    },
+
     name: {
       type: String,
       default: "",
@@ -97,7 +102,7 @@ const userSchema = new mongoose.Schema(
     // =============================
 
     feeDetails: {
-      referenceNo: String,
+      refNo: String,
 
       amount: Number,
 

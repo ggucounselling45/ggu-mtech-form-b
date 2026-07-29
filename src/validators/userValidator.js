@@ -2,6 +2,7 @@ import { body, validationResult } from "express-validator";
 
 export const validateSubmitForm = [
 
+
   // Personal Details
   body("name")
     .trim()

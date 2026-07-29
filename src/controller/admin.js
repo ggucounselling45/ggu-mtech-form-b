@@ -295,7 +295,8 @@ export const downloadApplicationsExcel = async (req, res) => {
         subjectOfStudy: application.academicDetails?.subjectOfStudy,
         otherQualification: application.academicDetails?.otherQualification,
         marks12: application.academicDetails?.marks12,
-        marksBTech: application.academicDetails?.marksBTech,
+        cgpa: application.academicDetails?.cgpa,
+        percentage: application.academicDetails?.percentage,
 
         // GATE
         gateQualified: application.academicDetails?.gateQualified
@@ -304,6 +305,8 @@ export const downloadApplicationsExcel = async (req, res) => {
         applicationNum: application.academicDetails?.applicationNum,
         yearOfExam: application.academicDetails?.yearOfExam,
         gateScore: application.academicDetails?.gateScore,
+        gateRank: application.academicDetails?.gateRank,
+     
 
         // Admission
         admissionStatus: application.admissionDetails?.admissionStatus

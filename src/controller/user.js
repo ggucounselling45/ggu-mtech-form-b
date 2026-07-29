@@ -11,6 +11,7 @@ export const submitForm = async (req, res) => {
 
   try {
     const {
+      applyCourseBranch,
       email,
       name,
       fatherName,
@@ -54,12 +55,12 @@ export const submitForm = async (req, res) => {
       mailDeclaration,
     } = req.body;
 
-    const existingUser = await Forms.findOne({ email });
+    const existingUser = await Forms.findOne({ refNo });
 
     if (existingUser) {
       return res.status(400).json({
         success: false,
-        message: "A form has already been submitted using this email.",
+        message: "A form has already been submitted using this reference number.",
       });
     }
 
@@ -103,6 +104,7 @@ export const submitForm = async (req, res) => {
     }
 
     const form = new Forms({
+      applyCourseBranch,
       email,
       name,
       fatherName,
