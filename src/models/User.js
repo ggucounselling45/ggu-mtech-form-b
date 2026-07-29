@@ -106,7 +106,6 @@ const userSchema = new mongoose.Schema(
         default: "",
         unique: true,
       },
-
       amount: Number,
 
       bank: String,

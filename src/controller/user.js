@@ -122,7 +122,7 @@ export const submitForm = async (req, res) => {
       physChallenged: physChallenged === "Yes",
 
       feeDetails: {
-        referenceNo: refNo,
+        refNo: refNo,
         amount: Number(amount),
         bank,
         paymentDate: date_feepayment,
