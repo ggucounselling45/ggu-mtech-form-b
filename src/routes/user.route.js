@@ -1,12 +1,5 @@
 import express from "express";
-// import {
-//   registerUser,
-//   loginUser,
-//   getUserProfile,
-//   logoutUser,
-// } from "../controller/user.js";
 import userAuth from "../middleware/userAuth.js";
-// import { getFormStatus } from "../controller/user.js";
 import { submitForm } from "../controller/user.js";
 import upload from "../middleware/upload.js";
 import validateFiles from "../validators/fileValidators.js";

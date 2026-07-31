@@ -5,6 +5,7 @@ import generateToken from "../utils/generateToken.js";
 import FormSettings from "../models/FormSetting.js";
 import uploadToCloudinary from "../utils/uploadToCloudinary.js";
 import deleteFromCloudinary from "../utils/deleteFromCloudinary.js";
+import sendEmail from "../utils/sendEmail.js";
 
 export const submitForm = async (req, res) => {
   const uploadedPublicIds = [];
@@ -55,17 +56,17 @@ export const submitForm = async (req, res) => {
       mailDeclaration,
     } = req.body;
 
+    const existingUser = await Forms.findOne({
+      "feeDetails.refNo": refNo,
+    });
 
-const existingUser = await Forms.findOne({
-  "feeDetails.refNo": refNo,
-});
-
-if (existingUser) {
-  return res.status(400).json({
-    success: false,
-    message: "A form has already been submitted using this Reference number.",
-  });
-}
+    if (existingUser) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "A form has already been submitted using this Reference number.",
+      });
+    }
     // Check if form is active
     const settings = await FormSettings.findOne();
 
@@ -170,6 +171,30 @@ if (existingUser) {
     });
 
     await form.save();
+
+
+    await sendEmail(
+      form.email,
+      "Admission Form Submitted Successfully",
+      `
+  <h2>Admission Form Submitted Successfully</h2>
+
+  <p>Dear <strong>${form.name}</strong>,</p>
+
+  <p>Your admission form has been submitted successfully.</p>
+
+  <p><strong>Application ID:</strong> ${form._id}</p>
+
+  <p>Course Applied: ${form.applyCourseBranch}</p>
+
+  <p>Please keep this ID for future reference.</p>
+
+  <br>
+  <p>Thank You</p>
+  `,
+    );
+
+    
 
     return res.status(200).json({
       success: true,
