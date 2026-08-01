@@ -154,10 +154,8 @@ const userSchema = new mongoose.Schema(
 
       marksheet12: fileSchema,
 
-     
-
       jeeMainScorecard: fileSchema,
-      DomicileCert:fileSchema,
+      DomicileCert: fileSchema,
 
       categoryCert: fileSchema,
 
@@ -189,6 +187,27 @@ const userSchema = new mongoose.Schema(
 
   {
     timestamps: true,
+  },
+
+  {
+    assignment: {
+      assignedTo: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "AdminUser",
+        default: null,
+      },
+
+      assignedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "AdminUser",
+        default: null,
+      },
+
+      assignedAt: {
+        type: Date,
+        default: null,
+      },
+    },
   },
 );
 

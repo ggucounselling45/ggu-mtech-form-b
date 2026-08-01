@@ -2,7 +2,7 @@ import express from "express";
 import { loginAdmin ,getProfile,logoutAdmin,createAdminUser} from "../controller/admin.js";
 import auth from "../middleware/auth.js";
 import role from "../middleware/role.js";
-import { getAllApplications,downloadApplicationsExcel } from "../controller/admin.js";
+import { getAllApplications,downloadApplicationsExcel, getAllBtechApplications,downloadBtechApplicationsExcel,assignApplications,getSubAdmins,getAssignedApplications } from "../controller/admin.js";
 
 const router = express.Router();
 
@@ -29,5 +29,39 @@ router.get(
   role("admin", "subAdmin"),
   downloadApplicationsExcel
 );
+
+router.get("/btechApplications",auth,role("admin","subAdmin"),
+getAllBtechApplications);
+
+router.get(
+  "/btechapplications/download/excel",
+  auth,
+  role("admin", "subAdmin"),
+  downloadBtechApplicationsExcel
+);
+
+router.post(
+  "/assign-applications",
+  auth,
+  role(["admin"]),
+  assignApplications
+);
+
+router.get(
+  "/sub-admins",
+  auth,
+  role(["admin"]),
+  getSubAdmins
+);
+
+router.get(
+  "/assigned-applications",
+  auth,
+  role(["subAdmin"]),
+  getAssignedApplications
+);
+
+
+
 
 export default router;

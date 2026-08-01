@@ -3,6 +3,7 @@ import AdminUser from "../models/AdminUser.js";
 import generateToken from "../utils/generateToken.js";
 import ExcelJS from "exceljs";
 import Forms from "../models/User.js";
+import FormsBtech from "../models/UserBtech.js";
 
 export const loginAdmin = async (req, res) => {
   try {
@@ -410,3 +411,352 @@ export const downloadApplicationsExcel = async (req, res) => {
     });
   }
 };
+
+
+
+//creating Admin Apis for btech....
+
+
+
+export const getAllBtechApplications = async (req, res) => {
+  try {
+    const forms = await FormsBtech.find(
+      {
+        isSubmitted: true,
+      },
+      {
+        password: 0,
+      },
+    ).sort({
+      createdAt: -1,
+    });
+
+    return res.status(200).json({
+      success: true,
+      totalApplications: forms.length,
+      applications: forms,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const downloadBtechApplicationsExcel = async (req, res) => {
+  try {
+    // Get all submitted applications
+    const applications = await FormsBtech.find(
+      { isSubmitted: true },
+      { password: 0 },
+    ).sort({ createdAt: -1 });
+
+    // Create workbook
+    const workbook = new ExcelJS.Workbook();
+    workbook.creator = "GGU Btech Admission Portal";
+    workbook.created = new Date();
+
+    // Create worksheet
+    const worksheet = workbook.addWorksheet("Student Applications Btech");
+
+    // Define columns
+    worksheet.columns = [
+      // Personal Information
+      { header: "Application ID", key: "id", width: 30 },
+      { header: "Name", key: "name", width: 25 },
+      { header: "JEE Main Roll No", key: "jeeMainRoll", width: 20 },
+      { header: "JEE Main All India Rank", key: "jeeMainAllIndiaRank", width: 20 },
+      { header: "Branch Alloted By", key: "BranchAllotedBy", width: 25 },
+      { header: "branchName", key: "branchName", width: 25 },
+      { header: "Father Name", key: "fatherName", width: 25 },
+      { header: "Mother Name", key: "motherName", width: 25 },
+      { header: "Email", key: "email", width: 35 },
+      { header: "DOB", key: "dob", width: 15 },
+      { header: "Gender", key: "gender", width: 15 },
+      { header: "Nationality", key: "nationality", width: 18 },
+      { header: "Religion", key: "religion", width: 18 },
+      { header: "Category", key: "category", width: 15 },
+      {
+        header: "Physically Challenged",
+        key: "physicallyChallenged",
+        width: 22,
+      },
+
+      // Contact
+      { header: "Mobile", key: "mobile", width: 18 },
+      { header: "Alternate Mobile", key: "altMobile", width: 18 },
+      { header: "Address", key: "address", width: 45 },
+
+      // Academic
+      
+      
+      { header: "12th Marks (%)", key: "marks12", width: 15 },
+      
+
+      
+
+      // Admission
+     
+
+      // Fee
+      { header: "Reference No", key: "referenceNo", width: 25 },
+      { header: "Amount", key: "amount", width: 15 },
+      { header: "Bank", key: "bank", width: 25 },
+      { header: "Payment Date", key: "paymentDate", width: 18 },
+
+      // Documents
+      { header: "Passport Photo", key: "passportPhoto", width: 40 },
+      { header: "10th Marksheet", key: "marksheet10", width: 40 },
+      { header: "12th Marksheet", key: "marksheet12", width: 40 },
+     
+      
+      { header: "Category Certificate", key: "categoryCert", width: 40 },
+      { header: "PWD Certificate", key: "pwdCert", width: 40 },
+      { header: "Allotment Letter", key: "allotmentLetter", width: 40 },
+      { header: "Fee Receipt", key: "feeReceipt", width: 40 },
+      { header: "Application Form", key: "appForm", width: 40 },
+
+      // Metadata
+      { header: "Submitted At", key: "createdAt", width: 22 },
+    ];
+
+    applications.forEach((application) => {
+      worksheet.addRow({
+        // Personal Information
+        id: application._id.toString(),
+        name: application.name,
+        fatherName: application.fatherName,
+        motherName: application.motherName,
+        email: application.email,
+        dob: application.dob
+          ? new Date(application.dob).toLocaleDateString("en-IN")
+          : "",
+        gender: application.gender,
+        nationality: application.nationality,
+        religion: application.religion,
+        category: application.category,
+        physicallyChallenged: application.physicallyChallenged ? "Yes" : "No",
+
+        // Contact
+        mobile: application.mobile,
+        altMobile: application.altMobile,
+        address: application.address,
+
+        // Academic
+        qualifyExam: application.academicDetails?.qualifyExam,
+        
+        twelfthBoardName: application.academicDetails?.twelfthBoardName,
+        
+        marks12: application.academicDetails?.marks12,
+       
+
+        // GATE
+        gateQualified: application.academicDetails?.gateQualified
+          ? "Yes"
+          : "No",
+        applicationNum: application.academicDetails?.applicationNum,
+        
+        
+     
+
+        // Admission
+        admissionStatus: application.admissionDetails?.BranchAllotedBy
+          ? "Yes"
+          : "No",
+        branchName: application.admissionDetails?.branchName,
+
+        // Fee
+        referenceNo: application.feeDetails?.referenceNo,
+        amount: application.feeDetails?.amount,
+        bank: application.feeDetails?.bank,
+        paymentDate: application.feeDetails?.paymentDate
+          ? new Date(application.feeDetails.paymentDate).toLocaleDateString(
+              "en-IN",
+            )
+          : "",
+
+        // Documents
+        passportPhoto: application.documents?.passportPhoto?.url,
+        
+        marksheet12: application.documents?.marksheet12?.url,
+        
+        jeeMainScorecard: application.documents?.jeeMainScorecard?.url,
+        categoryCert: application.documents?.categoryCert?.url,
+        pwdCert: application.documents?.pwdCert?.url,
+        allotmentLetter: application.documents?.allotmentLetter?.url,
+        feeReceipt: application.documents?.feeReceipt?.url,
+        appForm: application.documents?.appForm?.url,
+
+        // Metadata
+        createdAt: application.createdAt
+          ? new Date(application.createdAt).toLocaleString("en-IN")
+          : "",
+      });
+    });
+
+    // Style the header row
+    const headerRow = worksheet.getRow(1);
+
+    headerRow.font = {
+      bold: true,
+      color: { argb: "FFFFFFFF" },
+    };
+
+    headerRow.fill = {
+      type: "pattern",
+      pattern: "solid",
+      fgColor: { argb: "FF1F4E78" },
+    };
+
+    headerRow.alignment = {
+      vertical: "middle",
+      horizontal: "center",
+    };
+
+    headerRow.eachCell((cell) => {
+      cell.border = {
+        top: { style: "thin" },
+        left: { style: "thin" },
+        bottom: { style: "thin" },
+        right: { style: "thin" },
+      };
+    });
+
+    // Freeze header row
+    worksheet.views = [
+      {
+        state: "frozen",
+        ySplit: 1,
+      },
+    ];
+
+    // Enable filter
+    worksheet.autoFilter = {
+      from: "A1",
+      to: {
+        row: 1,
+        column: worksheet.columnCount,
+      },
+    };
+
+    // Response headers
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    );
+
+    res.setHeader(
+      "Content-Disposition",
+      'attachment; filename="GGU_Student_Applications.xlsx"',
+    );
+
+    // Write workbook to response
+    await workbook.xlsx.write(res);
+
+    res.end();
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
+//assigning api logic
+
+
+
+export const assignApplications = async (req, res) => {
+  try {
+    const { applicationIds, subAdminId } = req.body;
+
+    if (!applicationIds || applicationIds.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Please select at least one application.",
+      });
+    }
+
+    // Check whether the selected sub-admin exists
+    const subAdmin = await AdminUser.findOne({
+      _id: subAdminId,
+      role: "subAdmin",
+      isActive: true,
+      createdBy: req.user._id, // ensures admin can only assign to their own sub-admins
+    });
+
+    if (!subAdmin) {
+      return res.status(404).json({
+        success: false,
+        message: "Sub-admin not found.",
+      });
+    }
+
+    await FormsBtech.updateMany(
+      {
+        _id: { $in: applicationIds },
+      },
+      {
+        $set: {
+          "assignment.assignedTo": subAdmin._id,
+          "assignment.assignedBy": req.user._id,
+          "assignment.assignedAt": new Date(),
+        },
+      }
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Applications assigned successfully.",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+//api to get all the SubAdmins
+export const getSubAdmins = async (req, res) => {
+  try {
+    const subAdmins = await AdminUser.find({
+      role: "subAdmin",
+      createdBy: req.user._id,
+      isActive: true,
+    }).select("_id name email");
+
+    return res.status(200).json({
+      success: true,
+      subAdmins,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+//api for subAdmin to get all applications that is assigned to him
+export const getAssignedApplications = async (req, res) => {
+  try {
+    const applications = await UserBtech.find({
+      "assignment.assignedTo": req.user._id,
+    });
+
+    return res.status(200).json({
+      success: true,
+      applications,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
