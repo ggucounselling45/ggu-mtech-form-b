@@ -97,7 +97,7 @@ const userSchema = new mongoose.Schema(
     // =============================
 
     feeDetails: {
-      referenceNo: String,
+      refNo: String,
 
       amount: Number,
 
@@ -122,7 +122,7 @@ const userSchema = new mongoose.Schema(
         type: Date,
       },
 
-      jeeMainRoll: Number,
+      jeeMainApplicationNumber: Number,
 
       jeeMainAllIndiaRank: Number, //gate rank===gate marks
     },
@@ -155,7 +155,6 @@ const userSchema = new mongoose.Schema(
       marksheet12: fileSchema,
 
       jeeMainScorecard: fileSchema,
-      DomicileCert: fileSchema,
 
       categoryCert: fileSchema,
 

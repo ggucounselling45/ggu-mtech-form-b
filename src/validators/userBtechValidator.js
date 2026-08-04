@@ -70,10 +70,10 @@ export const validateSubmitForm = [
     .isISO8601()
     .withMessage("Invalid twelfthPassingYear."),
 
-  body("jeeMainRoll")
+  body("jeeMainApplicationNumber")
     .trim()
     .notEmpty()
-    .withMessage("JEE Main Roll Number is required."),
+    .withMessage("JEE Main Application Number is required."),
 
   body("jeeMainAllIndiaRank")
     .trim()

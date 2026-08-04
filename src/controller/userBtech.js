@@ -1,10 +1,9 @@
 import bcrypt from "bcrypt";
 import FormsBtech from "../models/UserBtech.js";
-// import generateToken from "../utils/generateToken.js";
-
-import FormSettings from "../models/FormSetting.js";
 import uploadToCloudinary from "../utils/uploadToCloudinary.js";
 import deleteFromCloudinary from "../utils/deleteFromCloudinary.js";
+import BtechFormSettings from "../models/BtechFormSetting.js";
+
 
 export const submitForm = async (req, res) => {
   const uploadedPublicIds = [];
@@ -36,7 +35,8 @@ export const submitForm = async (req, res) => {
       admissionStatus,
       BranchAllotedBy,
       branchName,
-
+      
+      jeeMainApplicationNumber,
       jeeMainAllIndiaRank,
 
       physChallenged,
@@ -45,17 +45,20 @@ export const submitForm = async (req, res) => {
       mailDeclaration,
     } = req.body;
 
-    const existingUser = await FormsBtech.findOne({ email });
+    const existingUser = await FormsBtech.findOne({
+      "feeDetails.refNo": refNo,
+    });
 
-    if (existingUser) {
+     if (existingUser) {
       return res.status(400).json({
         success: false,
-        message: "A form has already been submitted using this email.",
+        message:
+          "A form has already been submitted using this Reference number.",
       });
     }
 
     // Check if form is active
-    const settings = await FormSettings.findOne();
+    const settings = await BtechFormSettings.findOne();
 
     if (!settings || !settings.isFormActive) {
       return res.status(403).json({
@@ -71,8 +74,7 @@ export const submitForm = async (req, res) => {
       marksheet10: "GGU-Counselling-Btech/marksheet10",
       marksheet12: "GGU-Counselling-Btech/marksheet12",
 
-      jeeMainScoreCard: "GGU-Counselling-Btech/gateScorecard",
-      DomicileCert: "GGU-Counselling-Btech/DomicileCert",
+      jeeMainScoreCard: "GGU-Counselling-Btech/jeeMainScoreCard",
       categoryCert: "GGU-Counselling-Btech/categoryCertificate",
       pwdCert: "GGU-Counselling-Btech/pwdCertificate",
       allotmentLetter: "GGU-Counselling-Btech/allotmentLetter",
@@ -112,7 +114,7 @@ export const submitForm = async (req, res) => {
       physChallenged: physChallenged === "Yes",
 
       feeDetails: {
-        referenceNo: refNo,
+        refNo: refNo,
         amount: Number(amount),
         bank,
         paymentDate: date_feepayment,
@@ -131,6 +133,8 @@ export const submitForm = async (req, res) => {
         BranchAllotedBy,
         branchName,
       },
+      jeeMainApplicationNumber: Number(jeeMainApplicationNumber),
+      jeeMainAllIndiaRank: Number(jeeMainAllIndiaRank),
 
       documents: uploadedDocuments,
 

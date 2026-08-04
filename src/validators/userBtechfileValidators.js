@@ -14,7 +14,6 @@ const validateFiles = (req, res, next) => {
     "marksheet10",
     "marksheet12",
     "jeeMainScoreCard",
-    "DomicileCert",
     "feeReceipt",
     "appForm",
   ];
