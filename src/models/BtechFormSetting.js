@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const formSettingsSchema = new mongoose.Schema(
+const btechformSettingsSchema = new mongoose.Schema(
   {
     isFormActive: {
       type: Boolean,
@@ -13,6 +13,4 @@ const formSettingsSchema = new mongoose.Schema(
   },
 );
 
-export default mongoose.model("FormSettings", formSettingsSchema);
-
-
+export default mongoose.model("BtechFormSettings", btechformSettingsSchema);

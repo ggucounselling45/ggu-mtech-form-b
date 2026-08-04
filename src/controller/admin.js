@@ -5,6 +5,7 @@ import ExcelJS from "exceljs";
 import Forms from "../models/User.js";
 import FormsBtech from "../models/UserBtech.js";
 import FormSettings from "../models/FormSetting.js";
+import BtechFormSettings from "../models/BtechFormSetting.js";
 
 export const loginAdmin = async (req, res) => {
   try {
@@ -760,9 +761,7 @@ export const getAssignedApplications = async (req, res) => {
   }
 };
 
-// get form status
-
-
+// mtech get form status
 
 export const getFormStatus = async (req, res) => {
   try {
@@ -790,6 +789,60 @@ export const getFormStatus = async (req, res) => {
 export const toggleFormStatus = async (req, res) => {
   try {
     const settings = await FormSettings.findOne();
+
+    if (!settings) {
+      return res.status(404).json({
+        success: false,
+        message: "Form settings not found.",
+      });
+    }
+
+    settings.isFormActive = !settings.isFormActive;
+
+    await settings.save();
+
+    return res.status(200).json({
+      success: true,
+      message: settings.isFormActive
+        ? "Admission Form Enabled Successfully."
+        : "Admission Form Disabled Successfully.",
+      isFormActive: settings.isFormActive,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// btech form status
+export const getBtechFormStatus = async (req, res) => {
+  try {
+    const settings = await BtechFormSettings.findOne();
+
+    if (!settings) {
+      return res.status(404).json({
+        success: false,
+        message: "Form settings not found.",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      isFormActive: settings.isFormActive,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const toggleBtechFormStatus = async (req, res) => {
+  try {
+    const settings = await BtechFormSettings.findOne();
 
     if (!settings) {
       return res.status(404).json({
