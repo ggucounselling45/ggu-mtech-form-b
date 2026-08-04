@@ -183,7 +183,7 @@ export const submitForm = async (req, res) => {
 
   <p>Your admission form has been submitted successfully.</p>
 
-  <p><strong>Application ID:</strong> ${form._id}</p>
+  <p><strong>Application ID:</strong> ${form.applicationId}</p>
 
   <p>Course Applied: ${form.applyCourseBranch}</p>
 

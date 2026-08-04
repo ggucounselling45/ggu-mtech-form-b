@@ -1,4 +1,7 @@
 import mongoose from "mongoose";
+import { customAlphabet } from "nanoid";
+
+const nanoid = customAlphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 6);
 
 const fileSchema = new mongoose.Schema(
   {
@@ -16,6 +19,13 @@ const fileSchema = new mongoose.Schema(
 
 const userSchema = new mongoose.Schema(
   {
+
+    applicationId: {
+    type: String,
+    unique: true,
+    default: () => `26BT-${nanoid()}`,
+   },
+
     // =============================
     // Authentication
     // =============================

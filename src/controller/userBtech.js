@@ -3,6 +3,7 @@ import FormsBtech from "../models/UserBtech.js";
 import uploadToCloudinary from "../utils/uploadToCloudinary.js";
 import deleteFromCloudinary from "../utils/deleteFromCloudinary.js";
 import BtechFormSettings from "../models/BtechFormSetting.js";
+import sendEmail from "../utils/sendEmail.js";
 
 
 export const submitForm = async (req, res) => {
@@ -146,6 +147,26 @@ export const submitForm = async (req, res) => {
     });
 
     await form.save();
+    
+
+    await sendEmail(
+      form.email,
+      "Admission Form Submitted Successfully",
+      `
+  <h2>Admission Form Submitted Successfully</h2>
+
+  <p>Dear <strong>${form.name}</strong>,</p>
+
+  <p>Your admission form has been submitted successfully.</p>
+
+  <p><strong>Application ID:</strong> ${form.applicationId}</p>
+
+  <p>Please keep this ID for future reference.</p>
+
+  <br>
+  <p>Thank You</p>
+  `,
+    );
 
     return res.status(200).json({
       success: true,

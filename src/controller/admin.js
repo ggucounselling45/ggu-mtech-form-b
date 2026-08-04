@@ -207,7 +207,7 @@ export const downloadApplicationsExcel = async (req, res) => {
     // Define columns
     worksheet.columns = [
       // Personal Information
-      { header: "Application ID", key: "id", width: 30 },
+      { header: "Application ID", key: "applicationId", width: 20 },
       { header: "Name", key: "name", width: 25 },
       { header: "Father Name", key: "fatherName", width: 25 },
       { header: "Mother Name", key: "motherName", width: 25 },
@@ -273,7 +273,7 @@ export const downloadApplicationsExcel = async (req, res) => {
     applications.forEach((application) => {
       worksheet.addRow({
         // Personal Information
-        id: application._id.toString(),
+        applicationId: application.applicationId,
         name: application.name,
         fatherName: application.fatherName,
         motherName: application.motherName,
