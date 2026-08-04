@@ -64,7 +64,6 @@ router.get(
 
 router.get(
   "/form-status",
-  role("admin"),
   getFormStatus
 );
 
@@ -77,7 +76,6 @@ router.put(
 
 router.get(
   "/btech-form-status",
-  role("admin"),
   getBtechFormStatus
 );
 
