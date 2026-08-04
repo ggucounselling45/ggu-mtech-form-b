@@ -3,6 +3,7 @@ import { loginAdmin ,getProfile,logoutAdmin,createAdminUser} from "../controller
 import auth from "../middleware/auth.js";
 import role from "../middleware/role.js";
 import { getAllApplications,downloadApplicationsExcel, getAllBtechApplications,downloadBtechApplicationsExcel,assignApplications,getSubAdmins,getAssignedApplications } from "../controller/admin.js";
+import { getFormStatus,toggleFormStatus} from "../controller/admin.js";
 
 const router = express.Router();
 
@@ -59,6 +60,20 @@ router.get(
   auth,
   role(["subAdmin"]),
   getAssignedApplications
+);
+
+router.get(
+  "/form-status",
+  auth,
+  role("admin", "subAdmin"),
+  getFormStatus
+);
+
+router.put(
+  "/toggle-form-status",
+  auth,
+  role("admin"),
+  toggleFormStatus
 );
 
 

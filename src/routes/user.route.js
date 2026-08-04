@@ -23,7 +23,6 @@ const uploadFields = upload.fields([
 
 router.post(
   "/submit-form",
-
   uploadFields,
   validateSubmitForm,
   validate,
