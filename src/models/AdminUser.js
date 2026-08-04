@@ -8,7 +8,7 @@ const adminUserSchema = new mongoose.Schema(
       trim: true,
     },
 
-    email: {
+     email: {
       type: String,
       required: [true, "Email is required"],
       unique: true,
@@ -17,6 +17,12 @@ const adminUserSchema = new mongoose.Schema(
       match: [/^\S+@\S+\.\S+$/, "Please enter a valid email"]
     },
 
+    mobileNo: {
+      type: String,
+      required: [true, "Mobile number is required"],
+      unique: true,
+      trim: true,
+    },
     password: {
       type: String,
       required: [true, "Password is required"],
@@ -25,19 +31,20 @@ const adminUserSchema = new mongoose.Schema(
 
     role: {
       type: String,
-      enum: ["admin", "subAdmin"],
+      enum: ["teacher", "hod", "subAdmin"],
       required: true,
+    },
+
+    status: {
+      type: String,
+      enum: ["active", "inactive"],
+      default: "active",
     },
 
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "AdminUser",
       default: null,
-    },
-
-    isActive: {
-      type: Boolean,
-      default: true,
     },
   },
   {
@@ -46,5 +53,5 @@ const adminUserSchema = new mongoose.Schema(
 );
 
 
-const AdminUser=mongoose.model("AdminUser", adminUserSchema);
+const AdminUser = mongoose.model("AdminUser", adminUserSchema);
 export default AdminUser;

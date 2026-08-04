@@ -1,9 +1,15 @@
 import express from "express";
-import { loginAdmin ,getProfile,logoutAdmin,createAdminUser, getBtechFormStatus, toggleBtechFormStatus} from "../controller/admin.js";
+import { loginAdmin ,getProfile,logoutAdmin, getBtechFormStatus, toggleBtechFormStatus, getUsers, createUser, updateUser, deleteUser} from "../controller/admin.js";
 import auth from "../middleware/auth.js";
 import role from "../middleware/role.js";
-import { getAllApplications,downloadApplicationsExcel, getAllBtechApplications,downloadBtechApplicationsExcel,assignApplications,getSubAdmins,getAssignedApplications } from "../controller/admin.js";
+import { getAllApplications,downloadApplicationsExcel, getAllBtechApplications,downloadBtechApplicationsExcel,assignApplications,getAssignedApplications } from "../controller/admin.js";
 import { getFormStatus,toggleFormStatus} from "../controller/admin.js";
+
+import { deleteApplication } from "../controller/deletemtechApplication.js";
+import { deleteApplications } from "../controller/deletemtechApplications.js";
+
+import { deleteBtechApplication } from "../controller/deleteBtechApplication.js";
+import { deleteBtechApplications } from "../controller/deleteBtechApplications.js";
 
 const router = express.Router();
 
@@ -14,10 +20,33 @@ router.get("/profile", auth, getProfile);
 router.post("/logout", logoutAdmin);
 
 router.post(
-  "/create-admin-user",
+  "/users",
   auth,
   role("admin"),
-  createAdminUser
+  createUser
+);
+
+router.get(
+  "/users",
+  auth,
+  role("admin"),
+  getUsers
+);
+
+// Update User
+router.patch(
+  "/users/:id",
+  auth,
+  role("admin"),
+  updateUser
+);
+
+// Delete User
+router.delete(
+  "/users/:id",
+  auth,
+  role("admin"),
+  deleteUser
 );
 
 
@@ -35,7 +64,7 @@ router.get("/btechApplications",auth,role("admin","subAdmin"),
 getAllBtechApplications);
 
 router.get(
-  "/btechapplications/download/excel",
+  "/btechApplications/download/excel",
   auth,
   role("admin", "subAdmin"),
   downloadBtechApplicationsExcel
@@ -48,12 +77,7 @@ router.post(
   assignApplications
 );
 
-router.get(
-  "/sub-admins",
-  auth,
-  role(["admin"]),
-  getSubAdmins
-);
+
 
 router.get(
   "/assigned-applications",
@@ -85,6 +109,36 @@ router.put(
   role("admin"),
   toggleBtechFormStatus
 );
+
+router.delete(
+  "/application/:id",
+  auth,
+  role("admin"),
+  deleteApplication
+);
+
+router.delete(
+  "/applications",
+  auth,
+  role("admin"),
+  deleteApplications
+);
+
+router.delete(
+  "/btechApplication/:id",
+  auth,
+  role("admin"),
+  deleteBtechApplication
+);
+
+router.delete(
+  "/btechApplications",
+  auth,
+  role("admin"),
+  deleteBtechApplications
+);
+
+
 
 
 
