@@ -24,7 +24,7 @@ const app = express();
 app.use(cors({
   origin: [
     "http://localhost:3000",
-    "https://ggu-mtech-form-p89u.vercel.app"
+    "https://sset-ggu-admission.vercel.app"
   ],
   credentials: true,
 }));
